@@ -8,11 +8,7 @@
     "moduleResolution": "node",
     "outDir": "__compiled",
     "target": "es6",
-    "paths": {
-      "@authentication/*": ["authentication/*"],
-      "@common/*": ["common/*"],
-      "@sub-modules/*": ["sub-modules/*"]
-    }
+    "paths": {}
   },
   "exclude": ["node_modules"],
   "include": ["./src"]
