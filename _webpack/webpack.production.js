@@ -3,16 +3,18 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const DotENVWebpackPlugin = require("dotenv-webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
+const path = require("path");
 
 module.exports = {
   mode: "production",
   context: paths.compiled,
-  entry: filenames.entry,
+  entry: [
+    path.join(paths.compiled, paths.test, filenames.entry),
+    path.join(paths.compiled, paths.src, filenames.entry)
+  ],
   plugins: [
     new HTMLWebpackPlugin({
-      title: app.title,
-      template: `!!pug-loader!${paths.templates.production}`,
-      inject: false
+      title: app.title
     }),
     new DotENVWebpackPlugin(),
     process.env.ANALYZE_BUILD ? new BundleAnalyzerPlugin() : function() {}

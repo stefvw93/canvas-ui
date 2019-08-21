@@ -1,6 +1,7 @@
 const { paths, filenames, devServer, app } = require("../project.config");
 const webpack = require("webpack");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
 
 module.exports = {
   mode: "development",
@@ -12,13 +13,14 @@ module.exports = {
     historyApiFallback: true
   },
   context: paths.compiled,
-  entry: filenames.entry,
+  entry: [
+    path.join(paths.compiled, paths.test, filenames.entry),
+    path.join(paths.compiled, paths.src, filenames.entry)
+  ],
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HTMLWebpackPlugin({
       title: app.title,
-      template: `!!pug-loader!${paths.templates.development}`,
-      inject: false
+      template: `!!pug-loader!${paths.templates.development}`
     }),
     new webpack.DefinePlugin({
       "process.env.API_URL": JSON.stringify(process.env.API_URL)

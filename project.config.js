@@ -15,9 +15,10 @@ module.exports = {
     distribution: path.join(__dirname, "_dist"),
     webpack: path.join(__dirname, "_webpack"),
     templates: {
-      development: path.join("src", "index.template.pug"),
-      production: path.join("src", "index.template.pug")
+      development: path.join("test", "index.pug")
     },
+    src: "src",
+    test: "test",
     aliases: {
       // "@authentication/*": ["authentication/*"],
       // "@common/*": ["common/*"],
@@ -26,7 +27,7 @@ module.exports = {
   },
 
   devServer: {
-    hot: true,
+    hot: false,
     ip: "localhost", //localIp,
     open: true,
     port: 12020
