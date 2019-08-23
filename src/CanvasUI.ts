@@ -35,15 +35,17 @@ export class CanvasUI {
     console.log(this);
   }
 
-  public render(node: CanvasUI.VirtualNode): void {
-    console.log("CanvasUI.render", { node });
+  public render(node: CanvasUI.VirtualNode = this.nodeTree): void {
     this.nodeTree = this.nodeTree || node;
-    this.drawNodeTree(this.nodeTree);
+    const canvas = this.scene.canvas;
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.drawNodeTree(node);
   }
 
   private drawNodeTree(node: CanvasUI.VirtualNode): void {
-    console.log("CanvasUI.draw", { node });
     node.view.calculateLayout();
+    node.view.onLayout(this.scene.canvas);
     node.view.draw(this.scene.canvas);
     node.children.forEach(child => {
       this.drawNodeTree(child);
@@ -51,12 +53,16 @@ export class CanvasUI {
   }
 
   public static createVirtualNode<P = {}>(
-    ViewClass: new (properties: P, canvas: HTMLCanvasElement) => View<P>,
-    properties: P & CanvasUI.BasePositionProperties,
+    ViewClass: new (attributes: P, canvas: HTMLCanvasElement) => View<P>,
+    attributes: P & CanvasUI.PositionAttributes,
     ...childNodes: CanvasUI.VirtualNode[]
   ): CanvasUI.VirtualNode {
     const viewInstance = new ViewClass(
-      properties || (View.defaultProperties as any),
+      {
+        ...(attributes || (View.defaultAttributes as any)),
+        // flatten child nodes
+        childNodes: childNodes.reduce((acc, val) => acc.concat(val), [])
+      },
       CanvasUI.instance.scene.canvas
     );
     const render = viewInstance.render() || [];
@@ -66,10 +72,18 @@ export class CanvasUI {
       return c;
     }
 
-    const children = [
-      ...(Array.isArray(render) ? render : [render]).map(setRelations),
-      ...childNodes.map(setRelations)
-    ];
+    const childArray = Array.isArray(render) ? render : [render];
+    const children = childArray
+      .filter(childNode => {
+        const isNode = Utilities.isNode(childNode);
+        if (!isNode)
+          console.warn(
+            `Child node is not a valid node. Got ${typeof childNode}`,
+            childNode
+          );
+        return isNode;
+      })
+      .map(setRelations);
 
     viewInstance.children = children.map(c => c.view) as View[];
 
@@ -77,12 +91,6 @@ export class CanvasUI {
       view: viewInstance,
       children: children
     };
-
-    console.log("CanvasUI.createNode", {
-      ViewClass,
-      properties,
-      childNodes
-    });
 
     return node;
   }

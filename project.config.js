@@ -28,7 +28,7 @@ module.exports = {
 
   devServer: {
     hot: false,
-    ip: "localhost", //localIp,
+    ip: localIp,
     open: true,
     port: 12020
   }

@@ -1,6 +1,6 @@
 declare namespace JSX {
   interface ElementAttributesProperty {
-    properties;
+    attributes;
   }
 
   type IntrinsicElements = {
@@ -11,17 +11,9 @@ declare namespace JSX {
 type KeyValueMap = { [key: string]: any };
 
 declare namespace CanvasUI {
-  type BasePositionProperties = {
-    layoutFlow?: "horizontal" | "vertical";
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-  };
+  type Vector2 = { x: number; y: number };
 
-  type RectangleProperties = BasePositionProperties & {
-    fillColor?: string | CanvasGradient | CanvasPattern;
-  };
+  type FillStyle = string | CanvasGradient | CanvasPattern;
 
   type CanvasUISettings = {
     hidpi?: boolean;
@@ -35,6 +27,49 @@ declare namespace CanvasUI {
   };
 
   type UICanvasNode = VirtualNode | VirtualNode[] | null;
+
+  type FunctionBasedValue = () => number;
+
+  type Rectangle = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+
+  type PositionProperty = number | FunctionBasedValue;
+
+  type PositionAttributes = {
+    x?: PositionProperty;
+    y?: PositionProperty;
+    width?: PositionProperty;
+    height?: PositionProperty;
+  };
+
+  type LayoutAttributes = {
+    layoutFlow?: "horizontal" | "vertical";
+  };
+
+  type ViewAttributes = PositionAttributes &
+    LayoutAttributes & {
+      childNodes?: UICanvasNode;
+    };
+
+  type RectangleAttributes = ViewAttributes & {
+    fillStyle?: FillStyle;
+  };
+
+  type TextAttributes = PositionAttributes & {
+    direction?: CanvasDirection;
+    fillStyle?: FillStyle;
+    fontFamily?: string;
+    fontSize?: number;
+    fontStyle?: string;
+    lineHeight?: number;
+    text: string;
+    textAlign?: CanvasTextAlign;
+    textBaseline?: CanvasTextBaseline;
+  };
 
   class SceneClass {
     canvas: HTMLCanvasElement;
