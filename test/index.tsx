@@ -63,7 +63,7 @@ window.onload = function() {
       <RandomColor width={100} />
       <RandomColor layoutFlow="vertical">
         <RandomColor>
-          <TextContainer x={10} y={10} text={testText} fillStyle="#fff" />
+          <TextContainer text={testText} fillStyle="#fff" />
           <RandomColor />
         </RandomColor>
         <RandomColor layoutFlow="vertical" layoutAlignment="center">
