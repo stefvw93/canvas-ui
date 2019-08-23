@@ -8,7 +8,7 @@ document.body.style.padding = "0";
 document.body.style.margin = "0";
 document.body.style.overflow = "hidden";
 
-class Parent extends Rectangle {
+class Root extends Rectangle {
   render() {
     return this.attributes.childNodes;
   }
@@ -29,7 +29,7 @@ class Parent extends Rectangle {
   }
 }
 
-class Box extends Rectangle {
+class RandomColor extends Rectangle {
   constructor(a: CanvasUI.RectangleAttributes) {
     super(a);
     const rgb = `rgb(${[
@@ -47,27 +47,51 @@ class Box extends Rectangle {
   viewDidDraw() {}
 }
 
-class TextBox extends Text {}
+class TextContainer extends Text {}
 
 window.onload = function() {
   const ui = new CanvasUI();
 
   const app = (
-    <Parent
+    <Root
       width={Utilities.windowDimensions.width}
       height={Utilities.windowDimensions.height}
       fillStyle={"#fff"}
       layoutFlow="horizontal"
       layoutAlignment="space-around"
     >
-      <Box width={50} />
-      <Box layoutFlow="vertical">
-        <TextBox text={testText} />
-        <Box layoutFlow="vertical" layoutAlignment="center">
-          <Box height={60} />
-        </Box>
-      </Box>
-    </Parent>
+      <RandomColor width={100} />
+      <RandomColor layoutFlow="vertical">
+        <RandomColor>
+          <TextContainer
+            x={view => {
+              console.log(view);
+              return undefined;
+            }}
+            text={testText}
+            fillStyle="#fff"
+          />
+          <RandomColor />
+        </RandomColor>
+        <RandomColor layoutFlow="vertical" layoutAlignment="center">
+          <RandomColor height={100}>
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+            <RandomColor />
+          </RandomColor>
+          <RandomColor height={20} />
+          <RandomColor height={20} />
+          <RandomColor height={20} />
+        </RandomColor>
+      </RandomColor>
+    </Root>
   );
 
   ui.render(app);

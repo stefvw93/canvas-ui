@@ -155,7 +155,6 @@ export abstract class View<
                 offsetToAdd = flexSpace;
                 break;
               case "center":
-                console.log({ flexSpace });
                 offsetToAdd = flexSpace / 2;
                 break;
               case "space-around":

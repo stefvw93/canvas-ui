@@ -7,6 +7,7 @@ declare namespace JSX {
 type KeyValueMap = { [key: string]: any };
 
 declare namespace CanvasUI {
+  type View = import("./View").View;
   type Vector2 = { x: number; y: number };
 
   type RelativePosition = "parent" | "viewport";
@@ -29,13 +30,13 @@ declare namespace CanvasUI {
   };
 
   type VirtualNode = {
-    view: import("./View").View;
+    view: View;
     children: VirtualNode[];
   };
 
   type UICanvasNode = VirtualNode | VirtualNode[] | null;
 
-  type FunctionBasedValue = () => number;
+  type FunctionBasedValue = (view?: View) => number;
 
   type Rectangle = {
     x: number;
