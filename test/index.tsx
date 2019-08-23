@@ -65,7 +65,7 @@ window.onload = function() {
         <RandomColor>
           <TextContainer
             x={view => {
-              console.log(view);
+              console.log("functionbasedParam", view);
               return undefined;
             }}
             text={testText}

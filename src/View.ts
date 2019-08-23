@@ -254,12 +254,13 @@ export abstract class View<
     return space;
   }
 
-  protected getPositionPropertyValue(
-    property: CanvasUI.PositionProperty
-  ): number | undefined {
-    if (typeof property === "function") return property();
-    return property;
-  }
+  protected getPositionPropertyValue = (
+    value: CanvasUI.PositionProperty
+  ): number | undefined => {
+    const self = this;
+    if (typeof value === "function") return value(self);
+    return value;
+  };
 
   public draw(canvas?: HTMLCanvasElement): void {}
   public viewDidDraw(canvas?: HTMLCanvasElement): void {}
