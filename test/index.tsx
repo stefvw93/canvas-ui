@@ -1,5 +1,5 @@
 import { Power1, TweenMax } from "gsap";
-import CanvasUI, { Rectangle, Utilities } from "../src";
+import CanvasUI, { Rectangle, Text, Utilities } from "../src";
 const testText =
   "The CanvasRenderingContext2D method fillText(), part of the Canvas 2D API, draws a text string at the specified coordinates, filling the string's characters with the current fillStyle.";
 const testText1 =
@@ -17,7 +17,7 @@ class Parent extends Rectangle {
   viewDidDraw(canvas: HTMLCanvasElement): void {
     if (!this.animating) {
       TweenMax.to(this, 4, {
-        // width: 200,
+        width: 200,
         // height: 200,
         // x: 10,
         // y: 10,
@@ -47,6 +47,8 @@ class Box extends Rectangle {
   viewDidDraw() {}
 }
 
+class TextBox extends Text {}
+
 window.onload = function() {
   const ui = new CanvasUI();
 
@@ -56,11 +58,12 @@ window.onload = function() {
       height={Utilities.windowDimensions.height}
       fillStyle={"#000"}
       layoutFlow="horizontal"
-      layoutAlignment="space-between"
+      layoutAlignment="space-around"
     >
-      <Box width={100} />
       <Box width={50} />
-      <Box width={100} />
+      <Box width={100}>
+        <TextBox text={testText} />
+      </Box>
     </Parent>
   );
 

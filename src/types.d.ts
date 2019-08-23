@@ -68,7 +68,7 @@ declare namespace CanvasUI {
     fillStyle?: FillStyle;
   };
 
-  type TextAttributes = PositionAttributes & {
+  type TextAttributes = ViewAttributes & {
     direction?: CanvasDirection;
     fillStyle?: FillStyle;
     fontFamily?: string;

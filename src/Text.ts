@@ -13,11 +13,15 @@ export abstract class Text<
     lineHeight: 21,
     text: "",
     textAlign: "left",
-    textBaseline: "alphabetic"
+    textBaseline: "alphabetic",
+    layoutFlow: "horizontal",
+    relativePosition: "parent",
+    layoutAlignment: "start"
   } as CanvasUI.TextAttributes;
 
   constructor(attributes: A & T) {
     super(attributes, Text.defaultAttributes as T);
+    console.log(this.constructor.name, this.attributes);
   }
 
   public draw(canvas?: HTMLCanvasElement): void {
@@ -47,8 +51,8 @@ export abstract class Text<
     const { lineHeight, text } = this.attributes;
     const lines = [];
     const words = text.split(" ");
-    const width = this.getPositionPropertyValue(this.width);
-    const offsetY = this.getPositionPropertyValue(this.y);
+    const width = this.width;
+    const offsetY = this.y;
     let line = "";
     let lineTest = "";
     let currentY = 0;
