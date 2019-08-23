@@ -17,10 +17,10 @@ class Parent extends Rectangle {
   viewDidDraw(canvas: HTMLCanvasElement): void {
     if (!this.animating) {
       TweenMax.to(this, 4, {
-        width: 200,
-        // height: 200,
-        // x: 10,
-        // y: 10,
+        width: this.width * 0.8,
+        height: this.height * 0.8,
+        x: this.width * 0.1,
+        y: this.height * 0.1,
         ease: Power1.easeInOut,
         yoyo: true
       }).repeat(-1);
@@ -56,13 +56,16 @@ window.onload = function() {
     <Parent
       width={Utilities.windowDimensions.width}
       height={Utilities.windowDimensions.height}
-      fillStyle={"#000"}
+      fillStyle={"#fff"}
       layoutFlow="horizontal"
       layoutAlignment="space-around"
     >
       <Box width={50} />
-      <Box width={100}>
+      <Box layoutFlow="vertical">
         <TextBox text={testText} />
+        <Box layoutFlow="vertical" layoutAlignment="center">
+          <Box height={60} />
+        </Box>
       </Box>
     </Parent>
   );

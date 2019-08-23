@@ -98,7 +98,29 @@ export abstract class View<
       // if the view is positioned relative to it's parent
       if (relativePosition === "parent" && hasParent) {
         // if this view is the parent's only child
-        if (parent.children.length === 1) return parent[axis];
+        if (parent.children.length === 1) {
+          if (
+            (layoutFlow === "horizontal" && axis === "x") ||
+            (layoutFlow == "vertical" && axis === "y")
+          ) {
+            switch (layoutAlignment) {
+              case "start":
+                return parent[axis];
+              case "end":
+                return parent[axis] + parent[sizeProperty] - this[sizeProperty];
+              case "center":
+              case "space-around":
+              case "space-between":
+                return (
+                  parent[axis] +
+                  parent[sizeProperty] / 2 -
+                  this[sizeProperty] / 2
+                );
+            }
+          }
+
+          return parent[axis];
+        }
 
         if (
           (layoutFlow === "horizontal" && axis === "y") ||
@@ -133,6 +155,7 @@ export abstract class View<
                 offsetToAdd = flexSpace;
                 break;
               case "center":
+                console.log({ flexSpace });
                 offsetToAdd = flexSpace / 2;
                 break;
               case "space-around":
