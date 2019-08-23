@@ -63,14 +63,7 @@ window.onload = function() {
       <RandomColor width={100} />
       <RandomColor layoutFlow="vertical">
         <RandomColor>
-          <TextContainer
-            x={view => {
-              console.log("functionbasedParam", view);
-              return undefined;
-            }}
-            text={testText}
-            fillStyle="#fff"
-          />
+          <TextContainer x={10} y={10} text={testText} fillStyle="#fff" />
           <RandomColor />
         </RandomColor>
         <RandomColor layoutFlow="vertical" layoutAlignment="center">
