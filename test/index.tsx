@@ -1,4 +1,4 @@
-import { TweenMax } from "gsap";
+import { Power1, TweenMax } from "gsap";
 import CanvasUI, { Rectangle, Utilities } from "../src";
 const testText =
   "The CanvasRenderingContext2D method fillText(), part of the Canvas 2D API, draws a text string at the specified coordinates, filling the string's characters with the current fillStyle.";
@@ -17,10 +17,11 @@ class Parent extends Rectangle {
   viewDidDraw(canvas: HTMLCanvasElement): void {
     if (!this.animating) {
       TweenMax.to(this, 4, {
-        width: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-        height: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
-        x: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-        y: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
+        // width: 200,
+        // height: 200,
+        // x: 10,
+        // y: 10,
+        ease: Power1.easeInOut,
         yoyo: true
       }).repeat(-1);
     }
@@ -42,6 +43,8 @@ class Box extends Rectangle {
   render() {
     return this.attributes.childNodes;
   }
+
+  viewDidDraw() {}
 }
 
 window.onload = function() {
@@ -51,15 +54,13 @@ window.onload = function() {
     <Parent
       width={Utilities.windowDimensions.width}
       height={Utilities.windowDimensions.height}
-      fillStyle={"green"}
+      fillStyle={"#000"}
+      layoutFlow="horizontal"
+      layoutAlignment="space-between"
     >
+      <Box width={100} />
       <Box width={50} />
       <Box width={100} />
-      <Box layoutFlow="vertical">
-        <Box />
-        <Box />
-        <Box />
-      </Box>
     </Parent>
   );
 

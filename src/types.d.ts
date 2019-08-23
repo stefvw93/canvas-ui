@@ -2,16 +2,23 @@ declare namespace JSX {
   interface ElementAttributesProperty {
     attributes;
   }
-
-  type IntrinsicElements = {
-    [key: string]: any;
-  };
 }
 
 type KeyValueMap = { [key: string]: any };
 
 declare namespace CanvasUI {
   type Vector2 = { x: number; y: number };
+
+  type RelativePosition = "parent" | "viewport";
+
+  type LayoutFlow = "horizontal" | "vertical";
+
+  type LayoutAlignment =
+    | "start"
+    | "end"
+    | "center"
+    | "space-between"
+    | "space-around";
 
   type FillStyle = string | CanvasGradient | CanvasPattern;
 
@@ -47,8 +54,9 @@ declare namespace CanvasUI {
   };
 
   type LayoutAttributes = {
-    layoutFlow?: "horizontal" | "vertical";
-    relativePosition?: "parent" | "viewport";
+    layoutAlignment?: LayoutAlignment;
+    layoutFlow?: LayoutFlow;
+    relativePosition?: RelativePosition;
   };
 
   type ViewAttributes = PositionAttributes &

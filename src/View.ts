@@ -4,7 +4,8 @@ export abstract class View<
 > {
   public static defaultAttributes = {
     layoutFlow: "horizontal",
-    relativePosition: "parent"
+    relativePosition: "parent",
+    layoutAlignment: "start"
   } as CanvasUI.ViewAttributes;
 
   public readonly attributes: A & P;
@@ -52,7 +53,7 @@ export abstract class View<
   }
 
   public set width(width: number) {
-    this.position.width = width;
+    this.position.width = Math.max(0, width);
   }
 
   public get height(): number {
@@ -60,7 +61,7 @@ export abstract class View<
   }
 
   public set height(height: number) {
-    this.position.height = height;
+    this.position.height = Math.max(0, height);
   }
 
   private calculatePosition(axis: "x" | "y"): number {
@@ -71,6 +72,9 @@ export abstract class View<
     const hasParent = parent !== undefined;
     const sizeProperty = axis === "x" ? "width" : "height";
     const layoutFlow = hasParent ? parent.attributes.layoutFlow : undefined;
+    const layoutAlignment = hasParent
+      ? parent.attributes.layoutAlignment
+      : undefined;
 
     // if position was defined
     if (isDefined) {
@@ -109,12 +113,40 @@ export abstract class View<
           (layoutFlow == "vertical" && axis === "y")
         ) {
           let offset = parent[axis];
+          let flexChildren = 0;
           const viewIndex = parent.children.indexOf(this);
           for (let child of parent.children) {
+            if (child.attributes[sizeProperty] === undefined) flexChildren++;
             if (parent.children.indexOf(child) < viewIndex) {
               offset += child[sizeProperty];
             }
           }
+
+          const flexSpace = this.calculateFlexSpace(sizeProperty, parent, true);
+          let gutters = 0;
+          let offsetToAdd = 0;
+          if (flexChildren === 0) {
+            switch (layoutAlignment) {
+              case "start":
+                break;
+              case "end":
+                offsetToAdd = flexSpace;
+                break;
+              case "center":
+                offsetToAdd = flexSpace / 2;
+                break;
+              case "space-around":
+                gutters = parent.children.length + 1;
+                offsetToAdd = (flexSpace / gutters) * (viewIndex + 1);
+                break;
+              case "space-between":
+                gutters = parent.children.length - 1;
+                offsetToAdd = (flexSpace / gutters) * viewIndex;
+                break;
+            }
+          }
+
+          offset += offsetToAdd;
 
           return offset;
         }
@@ -159,34 +191,45 @@ export abstract class View<
           (layoutFlow === "horizontal" && dimension === "width") ||
           (layoutFlow == "vertical" && dimension === "height")
         ) {
-          // calculate space left after fixed siblings' total size
-          let remainingSpace = parent[dimension];
-          let flexChildrenAmount = 1;
-          const viewIndex = parent.children.indexOf(this);
-          for (let child of parent.children) {
-            const siblingIndex = parent.children.indexOf(child);
-            const childSize = child.attributes[dimension];
-
-            // if siblings size is defined
-            if (siblingIndex !== viewIndex && childSize !== undefined) {
-              remainingSpace -= this.getPositionPropertyValue(childSize);
-            }
-
-            // if sibling's size is not defined
-            if (siblingIndex !== viewIndex && childSize === undefined) {
-              flexChildrenAmount++;
-            }
-          }
-
-          // calculate size by deviding the remaining space by the "flex" children
-          const size = remainingSpace / flexChildrenAmount;
-
-          return size;
+          return this.calculateFlexSpace(dimension, parent);
         }
       }
     }
 
     return 0;
+  }
+
+  private calculateFlexSpace(
+    dimension: "width" | "height",
+    parent: View,
+    includeSelf = false
+  ): number {
+    // calculate space left after fixed siblings' total size
+    let remainingSpace = parent[dimension];
+    let flexChildrenAmount = 1;
+    const viewIndex = parent.children.indexOf(this);
+    for (let child of parent.children) {
+      const siblingIndex = parent.children.indexOf(child);
+      const childSize = child.attributes[dimension];
+
+      // if siblings size is defined
+      if (
+        (siblingIndex !== viewIndex || includeSelf) &&
+        childSize !== undefined
+      ) {
+        remainingSpace -= this.getPositionPropertyValue(childSize);
+      }
+
+      // if sibling's size is not defined
+      if (siblingIndex !== viewIndex && childSize === undefined) {
+        flexChildrenAmount++;
+      }
+    }
+
+    // calculate size by deviding the remaining space by the "flex" children
+    const space = remainingSpace / flexChildrenAmount;
+
+    return space;
   }
 
   protected getPositionPropertyValue(
