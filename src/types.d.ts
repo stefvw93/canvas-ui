@@ -48,6 +48,7 @@ declare namespace CanvasUI {
 
   type LayoutAttributes = {
     layoutFlow?: "horizontal" | "vertical";
+    relativePosition?: "parent" | "viewport";
   };
 
   type ViewAttributes = PositionAttributes &

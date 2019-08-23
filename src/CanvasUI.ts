@@ -44,6 +44,7 @@ export class CanvasUI {
   }
 
   private drawNodeTree(node: CanvasUI.VirtualNode): void {
+    console.log("CanvasUI.drawNodeTree", node.children);
     node.view.calculateLayout();
     node.view.onLayout(this.scene.canvas);
     node.view.draw(this.scene.canvas);
@@ -65,6 +66,7 @@ export class CanvasUI {
       },
       CanvasUI.instance.scene.canvas
     );
+
     const render = viewInstance.render() || [];
     function setRelations(c: CanvasUI.VirtualNode): CanvasUI.VirtualNode {
       viewInstance.children.push(c.view as View);

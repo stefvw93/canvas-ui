@@ -12,7 +12,7 @@ export abstract class Rectangle<
   }
 
   draw(canvas: HTMLCanvasElement): void {
-    const { x, y, width, height } = this.boundingRectangle;
+    const { x, y, width, height } = this;
     const context = canvas.getContext("2d");
     context.save();
     context.fillStyle = this.attributes.fillStyle;

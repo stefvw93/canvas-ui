@@ -1,5 +1,5 @@
 import { TweenMax } from "gsap";
-import CanvasUI, { Rectangle, Text, Utilities } from "../src";
+import CanvasUI, { Rectangle, Utilities } from "../src";
 const testText =
   "The CanvasRenderingContext2D method fillText(), part of the Canvas 2D API, draws a text string at the specified coordinates, filling the string's characters with the current fillStyle.";
 const testText1 =
@@ -10,43 +10,23 @@ document.body.style.overflow = "hidden";
 
 class Parent extends Rectangle {
   render() {
-    console.log("Parent.render", this.attributes);
     return this.attributes.childNodes;
   }
 
-  animating = false;
-  onLayout(canvas: HTMLCanvasElement): void {
-    if (!this.animating) {
-      TweenMax.to(this, 4, {
-        width: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-        height: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
-        x: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-        y: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
-        yoyo: true
-      }).repeat(-1);
-    }
-    this.animating = true;
-  }
+  // animating = false;
+  // onLayout(canvas: HTMLCanvasElement): void {
+  //   if (!this.animating) {
+  //     TweenMax.to(this, 4, {
+  //       width: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
+  //       height: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
+  //       x: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
+  //       y: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
+  //       yoyo: true
+  //     }).repeat(-1);
+  //   }
+  //   this.animating = true;
+  // }
 }
-
-class TextParent extends Rectangle<{ text: string }> {
-  render() {
-    return <TextChild text={this.attributes.text} />;
-  }
-
-  animating = false;
-  onLayout(canvas?: HTMLCanvasElement): void {
-    if (!this.animating)
-      TweenMax.to(this, 4, {
-        width: 50,
-        yoyo: true,
-        onStart: () => {
-          this.animating = true;
-        }
-      }).repeat(-1);
-  }
-}
-class TextChild extends Text {}
 
 class Box extends Rectangle {
   constructor(a: CanvasUI.RectangleAttributes) {
@@ -72,38 +52,11 @@ window.onload = function() {
       width={Utilities.windowDimensions.width}
       height={Utilities.windowDimensions.height}
       fillStyle={"green"}
-      layoutFlow="vertical"
     >
-      <TextChild text={testText} textAlign="left" />
-      <Box>
-        <Box>
-          <TextChild text={testText} textAlign="left" />
-        </Box>{" "}
-        <Box /> <Box />
-      </Box>
-      <Box>
+      <Box width={50} />
+      <Box width={100} />
+      <Box layoutFlow="vertical">
         <Box />
-        <Box layoutFlow="vertical">
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-          <Box />
-        </Box>
         <Box />
         <Box />
       </Box>
@@ -113,6 +66,6 @@ window.onload = function() {
   ui.render(app);
   TweenMax.ticker.addEventListener("tick", () => {
     // console.clear();
-    ui.render();
+    // ui.render();
   });
 };
