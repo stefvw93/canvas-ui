@@ -44,10 +44,8 @@ export class CanvasUI {
   }
 
   private drawNodeTree(node: CanvasUI.VirtualNode): void {
-    console.log("CanvasUI.drawNodeTree", node.children);
-    node.view.calculateLayout();
-    node.view.onLayout(this.scene.canvas);
     node.view.draw(this.scene.canvas);
+    node.view.viewDidDraw(this.scene.canvas);
     node.children.forEach(child => {
       this.drawNodeTree(child);
     });

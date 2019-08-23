@@ -13,19 +13,19 @@ class Parent extends Rectangle {
     return this.attributes.childNodes;
   }
 
-  // animating = false;
-  // onLayout(canvas: HTMLCanvasElement): void {
-  //   if (!this.animating) {
-  //     TweenMax.to(this, 4, {
-  //       width: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-  //       height: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
-  //       x: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
-  //       y: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
-  //       yoyo: true
-  //     }).repeat(-1);
-  //   }
-  //   this.animating = true;
-  // }
+  animating = false;
+  viewDidDraw(canvas: HTMLCanvasElement): void {
+    if (!this.animating) {
+      TweenMax.to(this, 4, {
+        width: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
+        height: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
+        x: this.getPositionPropertyValue(this.attributes.width || 4) / 4,
+        y: this.getPositionPropertyValue(this.attributes.height || 4) / 4,
+        yoyo: true
+      }).repeat(-1);
+    }
+    this.animating = true;
+  }
 }
 
 class Box extends Rectangle {
@@ -66,6 +66,6 @@ window.onload = function() {
   ui.render(app);
   TweenMax.ticker.addEventListener("tick", () => {
     // console.clear();
-    // ui.render();
+    ui.render();
   });
 };

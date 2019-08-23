@@ -35,25 +35,33 @@ export abstract class View<
     return this.calculatePosition("x");
   }
 
-  public set x(x: number) {}
+  public set x(x: number) {
+    this.position.x = x;
+  }
 
   public get y(): number {
     return this.calculatePosition("y");
   }
 
-  public set y(y: number) {}
+  public set y(y: number) {
+    this.position.y = y;
+  }
 
   public get width(): number {
-    return this.calculateSize("width");
+    return Math.max(0, this.calculateSize("width"));
   }
 
-  public set width(width: number) {}
+  public set width(width: number) {
+    this.position.width = width;
+  }
 
   public get height(): number {
-    return this.calculateSize("height");
+    return Math.max(0, this.calculateSize("height"));
   }
 
-  public set height(height: number) {}
+  public set height(height: number) {
+    this.position.height = height;
+  }
 
   private calculatePosition(axis: "x" | "y"): number {
     const position = this.position[axis];
@@ -181,10 +189,6 @@ export abstract class View<
     return 0;
   }
 
-  public calculateLayout(): void {
-    console.log("View.calculateLayout", this);
-  }
-
   protected getPositionPropertyValue(
     property: CanvasUI.PositionProperty
   ): number | undefined {
@@ -192,8 +196,8 @@ export abstract class View<
     return property;
   }
 
-  public onLayout(canvas?: HTMLCanvasElement): void {}
   public draw(canvas?: HTMLCanvasElement): void {}
+  public viewDidDraw(canvas?: HTMLCanvasElement): void {}
   public render(): CanvasUI.UICanvasNode {
     return null;
   }
